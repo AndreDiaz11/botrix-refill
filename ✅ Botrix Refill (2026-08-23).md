@@ -127,7 +127,8 @@ Solo Windows x64. Publicado self-contained (no requiere .NET instalado en la PC 
 No aplica — consulta la cuenta real de botrix.live/Kick que el usuario configura en Setup.
 
 ## Versión
-1.0.0 — primera versión del stack único (Avalonia + Velopack), reescritura completa desde Electron 1.7.0. Mismo comportamiento visual y funcional, más auto-actualización real (que la versión Electron nunca tuvo) y popup de Novedades.
+1.0.1 — monitoreo básico de errores (log local), publicada para probar el auto-update de punta a punta contra la v1.0.0.
 
 ## Cambios
-1. (23/08/2026) Migración completa de Electron/React a Avalonia (C#): mismas 3 pantallas (Setup/Shop/Pausa), mismo polling con jitter+backoff, mismas notificaciones nativas + Telegram, mismo tray, misma paleta azul. Repo git creado desde cero (el proyecto no tenía control de versiones), GitHub Releases + Velopack para auto-actualización real, popup de Novedades (proyecto compartido con otros streamers). Verificado visualmente con datos reales de producción.
+1. (23/08/2026) Monitoreo de errores: `Services/ErrorLogger.cs` — log local (`%AppData%\botrix-refill\error-log.txt`, tope de 500 líneas) conectado en los catch que antes fallaban en silencio (poller, refresh de puntos, Telegram, guardado de config). Sin Supabase porque el proyecto no tiene backend propio — todo el tráfico va directo del cliente a APIs públicas.
+2. (23/08/2026) Migración completa de Electron/React a Avalonia (C#): mismas 3 pantallas (Setup/Shop/Pausa), mismo polling con jitter+backoff, mismas notificaciones nativas + Telegram, mismo tray, misma paleta azul. Repo git creado desde cero (el proyecto no tenía control de versiones), GitHub Releases + Velopack para auto-actualización real, popup de Novedades (proyecto compartido con otros streamers). Verificado visualmente con datos reales de producción.

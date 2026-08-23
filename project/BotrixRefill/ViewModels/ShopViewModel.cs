@@ -108,6 +108,7 @@ public partial class ShopViewModel : ViewModelBase, IDisposable
         catch (Exception e)
         {
             ErrorMessage = e.Message;
+            ErrorLogger.Log("shop-load", e);
         }
         finally
         {
@@ -122,9 +123,10 @@ public partial class ShopViewModel : ViewModelBase, IDisposable
             var user = await BotrixApiService.FetchUserAsync(_config.Streamer, _config.SessionKid);
             if (user != null) User = user;
         }
-        catch
+        catch (Exception e)
         {
-            // silencioso — se reintenta en el próximo ciclo
+            // no se muestra en UI — se reintenta solo en el próximo ciclo de 60s
+            ErrorLogger.Log("refresh-points", e);
         }
     }
 

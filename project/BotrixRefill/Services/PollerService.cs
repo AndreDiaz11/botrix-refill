@@ -87,13 +87,14 @@ public class PollerService
                                   $"📺 Tienda de <b>{_config.Streamer}</b>\n" +
                                   $"🔗 https://botrix.live/k/{_config.Streamer}/shop";
                         _ = TelegramService.SendMessageAsync(_config.TelegramToken, _config.TelegramChatId, msg)
-                            .ContinueWith(t => { }, TaskContinuationOptions.OnlyOnFaulted);
+                            .ContinueWith(t => ErrorLogger.Log("telegram", t.Exception!.InnerException ?? t.Exception), TaskContinuationOptions.OnlyOnFaulted);
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 _consecutiveErrors++;
+                if (_consecutiveErrors == 1) ErrorLogger.Log("poller", ex);
             }
 
             try

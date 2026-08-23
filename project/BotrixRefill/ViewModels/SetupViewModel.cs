@@ -90,9 +90,10 @@ public partial class SetupViewModel : ViewModelBase
             ConfigStore.Save(cfg);
             SaveCompleted?.Invoke(cfg);
         }
-        catch
+        catch (Exception e)
         {
             ErrorMessage = "Error al guardar.";
+            ErrorLogger.Log("setup-save", e);
         }
         finally
         {
