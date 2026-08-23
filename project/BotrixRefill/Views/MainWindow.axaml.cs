@@ -40,33 +40,35 @@ public partial class MainWindow : Window
             Close();
         });
 
-        _ = CheckNewsThenUpdatesAsync();
+        _ = CheckNewsAndUpdatesAsync();
     }
 
-    private async Task CheckNewsThenUpdatesAsync()
-    {
-        await CheckNewsAsync();
-        await CheckUpdatesAsync();
-    }
-
-    private async Task CheckNewsAsync()
+    // Las dos consultas de red (Novedades y Actualización) se disparan a la vez
+    // — nunca una después de la otra — para que el popup de Actualización no
+    // tarde el doble esperando a que termine el de Novedades primero. El orden
+    // en que se MUESTRAN (Novedades antes que Actualización) es independiente
+    // de en qué orden terminan de responder.
+    private async Task CheckNewsAndUpdatesAsync()
     {
         var config = ConfigStore.Load();
-        var news = await NewsService.CheckAsync(config);
-        if (!news.ShouldShow) return;
+        var newsTask = NewsService.CheckAsync(config);
+        var updateTask = UpdateService.CheckAsync();
+        await Task.WhenAll(newsTask, updateTask);
 
-        var win = new NewsWindow(news.Version, news.Notes);
-        await win.ShowDialog(this);
-        NewsService.MarkSeen(config, news.Version);
-    }
+        var news = newsTask.Result;
+        if (news.ShouldShow)
+        {
+            var newsWin = new NewsWindow(news.Version, news.Notes);
+            await newsWin.ShowDialog(this);
+            NewsService.MarkSeen(config, news.Version);
+        }
 
-    private async Task CheckUpdatesAsync()
-    {
-        var result = await UpdateService.CheckAsync();
-        if (!result.Available || result.Version is null) return;
-
-        var win = new UpdateAvailableWindow(result.Version);
-        await win.ShowDialog(this);
+        var update = updateTask.Result;
+        if (update.Available && update.Version != null)
+        {
+            var updateWin = new UpdateAvailableWindow(update.Version);
+            await updateWin.ShowDialog(this);
+        }
     }
 
     private void OnClosing(object? sender, WindowClosingEventArgs e)
