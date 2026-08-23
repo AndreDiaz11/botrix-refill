@@ -99,7 +99,7 @@ No aplica en el sentido web — se "despliega" publicando un GitHub Release con 
 Ninguna en el cliente. `GITHUB_TOKEN` del propio workflow de Actions (automático, con permiso `contents: write` solo para ese repo).
 
 ## Estado
-Funcional: sí | Beta: sí (primera versión Avalonia, `v1.0.0`) | Última revisión: migración completa desde Electron/React, verificada visualmente con datos reales (usuario `mrchoco`, tienda con recompensas cargadas, imágenes remotas, puntos en vivo, minimizado a bandeja confirmado).
+Funcional: sí | Beta: no (`v1.0.3`, migración cerrada al 100%) | Última revisión: auto-actualización probada de punta a punta con una instalación real (v1.0.0 → detectó v1.0.3 → descargó → se reemplazó → reinició sola en la versión nueva), popup de Novedades verificado con título/versión correctos y sin superposición con el popup de actualización, monitoreo básico de errores (log local) conectado en todos los catch que antes fallaban en silencio, y un crash real encontrado y corregido durante estas pruebas (excepción no manejada en la descarga tumbaba la app).
 
 ## Integraciones externas
 | Servicio | Endpoint | Auth | Uso |
