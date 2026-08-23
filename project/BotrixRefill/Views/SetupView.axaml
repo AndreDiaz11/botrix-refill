@@ -17,86 +17,139 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <Border Background="White" CornerRadius="18" Width="380" Padding="26"
-                HorizontalAlignment="Center" VerticalAlignment="Center"
-                BoxShadow="0 16 48 0 #24000000">
-            <StackPanel Spacing="4">
+        <ScrollViewer HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+        <Border Background="White" CornerRadius="20" Width="560" Padding="40,34"
+                BoxShadow="0 20 60 0 #22000000">
+            <StackPanel Spacing="0">
 
-                <StackPanel HorizontalAlignment="Center" Spacing="10" Margin="0,0,0,14">
-                    <Border Width="48" Height="48" CornerRadius="14" HorizontalAlignment="Center">
+                <!-- Encabezado -->
+                <StackPanel HorizontalAlignment="Center" Spacing="6" Margin="0,0,0,26">
+                    <Border Width="56" Height="56" CornerRadius="16" HorizontalAlignment="Center" Margin="0,0,0,8">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
                                 <GradientStop Color="#2563EB" Offset="0" />
                                 <GradientStop Color="#3B82F6" Offset="1" />
                             </LinearGradientBrush>
                         </Border.Background>
-                        <TextBlock Text="⬡" FontSize="22" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBlock Text="⬡" FontSize="24" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
-                    <TextBlock Text="Botrix Refill" FontSize="16" FontWeight="Bold" Foreground="#111827" HorizontalAlignment="Center" />
+                    <TextBlock Text="Botrix Refill" FontSize="24" FontWeight="Bold" Foreground="#111827" HorizontalAlignment="Center" />
+                    <TextBlock Text="Configura tu monitoreo en pocos pasos" FontSize="13" Foreground="#6B7280" HorizontalAlignment="Center" />
                 </StackPanel>
 
-                <!-- Streamer -->
-                <StackPanel Spacing="2" Margin="0,0,0,8">
-                    <Button Classes="accordion-head" Command="{Binding ToggleSectionCommand}" CommandParameter="streamer">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="Streamer" />
-                            <TextBlock Grid.Column="1" Text="▾" />
-                        </Grid>
-                    </Button>
-                    <TextBox Classes="form-input" Watermark="mrchoco o link de botrix.live"
-                              Text="{Binding Streamer}"
-                              IsVisible="{Binding OpenSection, ConverterParameter=streamer, Converter={x:Static local:EqualsConverter.Instance}}" />
-                </StackPanel>
+                <!-- 1. Streamer -->
+                <Grid ColumnDefinitions="Auto,*" Margin="0,0,0,14">
+                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Background="#EFF6FF" VerticalAlignment="Top">
+                        <Canvas Width="20" Height="20">
+                            <Ellipse Canvas.Left="6" Canvas.Top="1" Width="8" Height="8" Stroke="#2563EB" StrokeThickness="1.6" />
+                            <Path Data="M2,19 A8,8 0 0 1 18,19" Stroke="#2563EB" StrokeThickness="1.6" />
+                        </Canvas>
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="1">
+                        <TextBlock Text="1. Streamer" FontSize="14.5" FontWeight="Bold" Foreground="#111827" />
+                        <TextBlock Text="Ingresa el Nickname o Link de Botrix.live" FontSize="12" Foreground="#6B7280" Margin="0,0,0,8" />
+                        <TextBox Classes="form-input" Watermark="Nickname o Link de Botrix.live" Text="{Binding Streamer}" />
+                    </StackPanel>
+                </Grid>
 
-                <!-- Session-kid -->
-                <StackPanel Spacing="2" Margin="0,0,0,8">
-                    <Button Classes="accordion-head" Command="{Binding ToggleSectionCommand}" CommandParameter="sessionKid">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="Session-kid" />
-                            <TextBlock Grid.Column="1" Text="▾" />
-                        </Grid>
-                    </Button>
-                    <TextBox Classes="form-input" Watermark="b9d790..."
-                              Text="{Binding SessionKid}"
-                              IsVisible="{Binding OpenSection, ConverterParameter=sessionKid, Converter={x:Static local:EqualsConverter.Instance}}" />
-                </StackPanel>
+                <Border Height="1" Background="#EEF0F5" Margin="0,10,0,20" />
 
-                <!-- Telegram -->
-                <StackPanel Spacing="8" Margin="0,0,0,8">
-                    <Button Classes="accordion-head" Command="{Binding ToggleSectionCommand}" CommandParameter="telegram">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="Telegram" />
-                            <TextBlock Grid.Column="1" Text="▾" />
+                <!-- 2. Session-kid -->
+                <Grid ColumnDefinitions="Auto,*" Margin="0,0,0,14">
+                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Background="#EFF6FF" VerticalAlignment="Top">
+                        <Canvas Width="20" Height="20">
+                            <Ellipse Canvas.Left="1" Canvas.Top="6" Width="8" Height="8" Stroke="#2563EB" StrokeThickness="1.6" />
+                            <Line StartPoint="9,10" EndPoint="19,10" Stroke="#2563EB" StrokeThickness="1.6" />
+                            <Line StartPoint="14,10" EndPoint="14,14" Stroke="#2563EB" StrokeThickness="1.6" />
+                            <Line StartPoint="18,10" EndPoint="18,13" Stroke="#2563EB" StrokeThickness="1.6" />
+                        </Canvas>
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="1">
+                        <TextBlock Text="2. Session-kid" FontSize="14.5" FontWeight="Bold" Foreground="#111827" />
+                        <TextBlock Text="Ingresa el session-kid de tu canal" FontSize="12" Foreground="#6B7280" Margin="0,0,0,8" />
+                        <Grid>
+                            <TextBox Classes="form-input" Watermark="Pega aquí tu session-kid" Text="{Binding SessionKid}" Padding="10,9,32,9" />
+                            <TextBlock Text="✓" FontSize="15" FontWeight="Bold" Foreground="#16A34A"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,12,0"
+                                       IsVisible="{Binding SessionKidHasValue}" />
                         </Grid>
-                    </Button>
-                    <StackPanel Spacing="8" IsVisible="{Binding OpenSection, ConverterParameter=telegram, Converter={x:Static local:EqualsConverter.Instance}}">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0" Text="Activar notificaciones" FontSize="12" VerticalAlignment="Center" />
-                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding TelegramEnabled}" OnContent="" OffContent="" />
+                    </StackPanel>
+                </Grid>
+
+                <Border Height="1" Background="#EEF0F5" Margin="0,10,0,20" />
+
+                <!-- 3. Telegram -->
+                <Grid ColumnDefinitions="Auto,*" Margin="0,0,0,16">
+                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Background="#EFF6FF" VerticalAlignment="Top">
+                        <Canvas Width="20" Height="20">
+                            <Polygon Points="1,10 19,1 12,19 9,12 1,10" Fill="#2563EB" />
+                        </Canvas>
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="1">
+                        <TextBlock Text="3. Telegram" FontSize="14.5" FontWeight="Bold" Foreground="#111827" />
+                        <TextBlock Text="Ingresa tus credenciales de Telegram para recibir alertas" FontSize="12" Foreground="#6B7280" />
+                    </StackPanel>
+                </Grid>
+
+                <Border Background="#F7F8FC" CornerRadius="14" Padding="18">
+                    <StackPanel Spacing="16">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Border Grid.Column="0" Width="34" Height="34" CornerRadius="17" Background="#2563EB" VerticalAlignment="Top">
+                                <Path Data="M9.5,1.5 A3.5,3.5 0 0 0 6,5 L5.2,10.5 L13.8,10.5 L13,5 A3.5,3.5 0 0 0 9.5,1.5 Z"
+                                      Stretch="Uniform" Width="15" Height="15" Fill="White" Margin="0,3,0,0" />
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="12,0,10,0" Spacing="1" VerticalAlignment="Center">
+                                <TextBlock Text="Notificaciones" FontSize="13.5" FontWeight="Bold" Foreground="#111827" />
+                                <TextBlock Text="Recibe alertas en Telegram cuando el stream cambie de estado" FontSize="11.5"
+                                           Foreground="#6B7280" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="2" IsChecked="{Binding TelegramEnabled}" OnContent="" OffContent="" VerticalAlignment="Center" />
                         </Grid>
-                        <StackPanel Spacing="8" IsVisible="{Binding TelegramEnabled}">
-                            <TextBox Classes="form-input" Watermark="Bot Token" Text="{Binding TelegramToken}" />
-                            <TextBox Classes="form-input" Watermark="Chat ID" Text="{Binding TelegramChatId}" />
+
+                        <StackPanel Spacing="16" IsVisible="{Binding TelegramEnabled}">
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="14">
+                                <StackPanel Grid.Column="0" Spacing="4">
+                                    <TextBlock Text="Bot Token" FontSize="12.5" FontWeight="SemiBold" Foreground="#111827" />
+                                    <TextBox Classes="form-input" Watermark="123456789:AA..." Text="{Binding TelegramToken}" />
+                                    <TextBlock Text="Token de tu bot de Telegram" FontSize="10.5" Foreground="#9CA3AF" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="4">
+                                    <TextBlock Text="Chat ID" FontSize="12.5" FontWeight="SemiBold" Foreground="#111827" />
+                                    <TextBox Classes="form-input" Watermark="-1001234567890" Text="{Binding TelegramChatId}" />
+                                    <TextBlock Text="ID del chat donde recibirás las alertas" FontSize="10.5" Foreground="#9CA3AF" />
+                                </StackPanel>
+                            </Grid>
+
                             <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                                <Button Classes="btn-ghost" Content="{Binding TestButtonLabel}"
-                                        Command="{Binding TestCommand}" IsEnabled="{Binding !TestLoading}" Padding="10,7" FontSize="11" />
-                                <TextBlock Text="{Binding TestMessage}" FontSize="11"
+                                <Button Classes="btn-ghost" Command="{Binding TestCommand}" IsEnabled="{Binding !TestLoading}" Padding="12,8" FontSize="12">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <TextBlock Text="📶" FontSize="12" />
+                                        <TextBlock Text="{Binding TestButtonLabel}" />
+                                    </StackPanel>
+                                </Button>
+                                <TextBlock Text="{Binding TestMessage}" FontSize="11.5"
                                             Foreground="{Binding TestMessageIsOk, Converter={x:Static local:BoolToBrushConverter.Instance}}" />
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
-                </StackPanel>
+                </Border>
 
-                <Border Background="#FFF1F0" CornerRadius="6" Padding="7,6"
+                <Border Background="#FFF1F0" CornerRadius="8" Padding="8,7" Margin="0,16,0,0"
                         IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                     <TextBlock Text="{Binding ErrorMessage}" FontSize="12" Foreground="#F04438" TextWrapping="Wrap" />
                 </Border>
 
-                <Button Classes="btn-primary" Margin="0,10,0,0"
+                <Button Classes="btn-primary" Margin="0,20,0,0" HorizontalAlignment="Stretch" Padding="0,13"
                         Content="{Binding SaveButtonLabel}"
-                        Command="{Binding SaveCommand}" IsEnabled="{Binding !IsLoading}" />
+                        Command="{Binding SaveCommand}" IsEnabled="{Binding !IsLoading}" FontSize="14.5" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6" Margin="0,16,0,0">
+                    <TextBlock Text="🔒" FontSize="11" />
+                    <TextBlock Text="Tus datos están seguros y encriptados" FontSize="11.5" Foreground="#9CA3AF" />
+                </StackPanel>
             </StackPanel>
         </Border>
+        </ScrollViewer>
     </Grid>
 
 </UserControl>

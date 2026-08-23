@@ -27,9 +27,6 @@ public partial class SetupViewModel : ViewModelBase
     private string _telegramChatId = "";
 
     [ObservableProperty]
-    private string _openSection = "streamer";
-
-    [ObservableProperty]
     private bool _isLoading;
 
     [ObservableProperty]
@@ -46,9 +43,11 @@ public partial class SetupViewModel : ViewModelBase
 
     public string SaveButtonLabel => IsLoading ? "Cargando..." : "▶  Iniciar monitoreo";
     public string TestButtonLabel => TestLoading ? "Enviando..." : "Probar conexión";
+    public bool SessionKidHasValue => !string.IsNullOrWhiteSpace(SessionKid);
 
     partial void OnIsLoadingChanged(bool value) => OnPropertyChanged(nameof(SaveButtonLabel));
     partial void OnTestLoadingChanged(bool value) => OnPropertyChanged(nameof(TestButtonLabel));
+    partial void OnSessionKidChanged(string value) => OnPropertyChanged(nameof(SessionKidHasValue));
 
     public SetupViewModel(AppConfig? saved)
     {
@@ -58,12 +57,6 @@ public partial class SetupViewModel : ViewModelBase
         TelegramEnabled = saved.TelegramEnabled;
         TelegramToken = saved.TelegramToken;
         TelegramChatId = saved.TelegramChatId;
-    }
-
-    [RelayCommand]
-    private void ToggleSection(string name)
-    {
-        OpenSection = OpenSection == name ? "" : name;
     }
 
     [RelayCommand]
