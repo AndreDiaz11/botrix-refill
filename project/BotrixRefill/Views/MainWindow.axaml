@@ -1,0 +1,58 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BotrixRefill.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="920" d:DesignHeight="660"
+        x:Class="BotrixRefill.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/icon.ico"
+        Width="920" Height="660" MinWidth="780" MinHeight="560"
+        Background="#F2F3F9"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        Title="Botrix Refill">
+
+    <Grid RowDefinitions="44,*">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" PointerPressed="Titlebar_PointerPressed">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                    <GradientStop Color="#1D4ED8" Offset="0" />
+                    <GradientStop Color="#3B82F6" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0" Spacing="10">
+                <Ellipse Width="7" Height="7" Fill="#FFFFFF" Opacity="0.6" />
+                <TextBlock Text="BOTRIX REFILL" FontSize="12" FontWeight="Bold" Foreground="White" />
+                <Border Background="#2EFFFFFF" CornerRadius="20" Padding="10,2" IsVisible="{Binding TitlebarPill, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <TextBlock Text="{Binding TitlebarPill}" FontSize="11" Foreground="#CCFFFFFF" />
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" Margin="0,0,6,0">
+                <Button Content="─" Click="Minimize_Click" Classes="titlebar-btn" />
+                <Button Content="✕" Click="Close_Click" Classes="titlebar-btn close" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <ContentControl Content="{Binding CurrentPage}" IsVisible="{Binding !IsPaused}" />
+
+            <Grid IsVisible="{Binding IsPaused}" Background="#E8F0FF">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
+                    <TextBlock Text="⏹" FontSize="40" HorizontalAlignment="Center" />
+                    <TextBlock Text="Monitoreo detenido" FontSize="18" FontWeight="Bold" Foreground="#111827" HorizontalAlignment="Center" />
+                    <TextBlock Text="La app sigue en el tray pero no está revisando la tienda." FontSize="13" Foreground="#6B7280" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" Margin="0,10,0,0">
+                        <Button Content="↩ Cambiar streamer" Click="ChangeStreamer_Click" Classes="btn-ghost" />
+                        <Button Content="▶ Reanudar" Click="Resume_Click" Classes="btn-primary" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+
+</Window>

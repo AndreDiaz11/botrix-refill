@@ -1,5 +1,7 @@
-project/node_modules/
-project/out/
-project/dist-electron/
 *.log
 *.exe
+
+project/BotrixRefill/bin/
+project/BotrixRefill/obj/
+project/BotrixRefill/publish/
+project/BotrixRefill/Releases/

@@ -1,0 +1,102 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BotrixRefill.ViewModels"
+             xmlns:local="using:BotrixRefill.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="920" d:DesignHeight="616"
+             x:Class="BotrixRefill.Views.SetupView"
+             x:DataType="vm:SetupViewModel">
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="70%,100%">
+                <GradientStop Color="#E8F0FF" Offset="0" />
+                <GradientStop Color="#EAF3FF" Offset="0.55" />
+                <GradientStop Color="#EEF7FF" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Border Background="White" CornerRadius="18" Width="380" Padding="26"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                BoxShadow="0 16 48 0 #24000000">
+            <StackPanel Spacing="4">
+
+                <StackPanel HorizontalAlignment="Center" Spacing="10" Margin="0,0,0,14">
+                    <Border Width="48" Height="48" CornerRadius="14" HorizontalAlignment="Center">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                <GradientStop Color="#2563EB" Offset="0" />
+                                <GradientStop Color="#3B82F6" Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock Text="⬡" FontSize="22" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="Botrix Refill" FontSize="16" FontWeight="Bold" Foreground="#111827" HorizontalAlignment="Center" />
+                </StackPanel>
+
+                <!-- Streamer -->
+                <StackPanel Spacing="2" Margin="0,0,0,8">
+                    <Button Classes="accordion-head" Command="{Binding ToggleSectionCommand}" CommandParameter="streamer">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="Streamer" />
+                            <TextBlock Grid.Column="1" Text="▾" />
+                        </Grid>
+                    </Button>
+                    <TextBox Classes="form-input" Watermark="mrchoco o link de botrix.live"
+                              Text="{Binding Streamer}"
+                              IsVisible="{Binding OpenSection, ConverterParameter=streamer, Converter={x:Static local:EqualsConverter.Instance}}" />
+                </StackPanel>
+
+                <!-- Session-kid -->
+                <StackPanel Spacing="2" Margin="0,0,0,8">
+                    <Button Classes="accordion-head" Command="{Binding ToggleSectionCommand}" CommandParameter="sessionKid">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="Session-kid" />
+                            <TextBlock Grid.Column="1" Text="▾" />
+                        </Grid>
+                    </Button>
+                    <TextBox Classes="form-input" Watermark="b9d790..."
+                              Text="{Binding SessionKid}"
+                              IsVisible="{Binding OpenSection, ConverterParameter=sessionKid, Converter={x:Static local:EqualsConverter.Instance}}" />
+                </StackPanel>
+
+                <!-- Telegram -->
+                <StackPanel Spacing="8" Margin="0,0,0,8">
+                    <Button Classes="accordion-head" Command="{Binding ToggleSectionCommand}" CommandParameter="telegram">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="Telegram" />
+                            <TextBlock Grid.Column="1" Text="▾" />
+                        </Grid>
+                    </Button>
+                    <StackPanel Spacing="8" IsVisible="{Binding OpenSection, ConverterParameter=telegram, Converter={x:Static local:EqualsConverter.Instance}}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="Activar notificaciones" FontSize="12" VerticalAlignment="Center" />
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding TelegramEnabled}" OnContent="" OffContent="" />
+                        </Grid>
+                        <StackPanel Spacing="8" IsVisible="{Binding TelegramEnabled}">
+                            <TextBox Classes="form-input" Watermark="Bot Token" Text="{Binding TelegramToken}" />
+                            <TextBox Classes="form-input" Watermark="Chat ID" Text="{Binding TelegramChatId}" />
+                            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                <Button Classes="btn-ghost" Content="{Binding TestButtonLabel}"
+                                        Command="{Binding TestCommand}" IsEnabled="{Binding !TestLoading}" Padding="10,7" FontSize="11" />
+                                <TextBlock Text="{Binding TestMessage}" FontSize="11"
+                                            Foreground="{Binding TestMessageIsOk, Converter={x:Static local:BoolToBrushConverter.Instance}}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <Border Background="#FFF1F0" CornerRadius="6" Padding="7,6"
+                        IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <TextBlock Text="{Binding ErrorMessage}" FontSize="12" Foreground="#F04438" TextWrapping="Wrap" />
+                </Border>
+
+                <Button Classes="btn-primary" Margin="0,10,0,0"
+                        Content="{Binding SaveButtonLabel}"
+                        Command="{Binding SaveCommand}" IsEnabled="{Binding !IsLoading}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+
+</UserControl>

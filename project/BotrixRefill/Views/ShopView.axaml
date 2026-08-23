@@ -1,0 +1,155 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BotrixRefill.ViewModels"
+             xmlns:local="using:BotrixRefill.Converters"
+             xmlns:beh="using:BotrixRefill.Behaviors"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="920" d:DesignHeight="616"
+             x:Class="BotrixRefill.Views.ShopView"
+             x:DataType="vm:ShopViewModel">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="RewardCardTemplate" DataType="vm:RewardCardViewModel">
+            <Border Background="White" BorderBrush="#E5E7EB" BorderThickness="1.5" CornerRadius="8"
+                    Width="150" Padding="10" Margin="0,0,8,8">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                    <Border Grid.Row="0" Background="{Binding CardAccent}" Height="3" CornerRadius="2" Margin="0,0,0,8" />
+                    <Border Grid.Row="1" Width="44" Height="44" Background="#F7F8FC" CornerRadius="6" HorizontalAlignment="Center">
+                        <Panel>
+                            <TextBlock Text="🎁" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       IsVisible="{Binding Image, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                            <Image beh:WebImageBehavior.Url="{Binding Image}" Stretch="UniformToFill"
+                                   IsVisible="{Binding Image, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        </Panel>
+                    </Border>
+                    <TextBlock Grid.Row="2" Text="{Binding Name}" FontSize="11.5" FontWeight="SemiBold" Foreground="#111827"
+                               TextWrapping="Wrap" TextAlignment="Center" Margin="0,6,0,6" />
+                    <Button Grid.Row="3" Content="{Binding CopyLabel}" Command="{Binding CopyCommand}"
+                            HorizontalAlignment="Center" FontSize="10.5" Padding="8,3" CornerRadius="20"
+                            Background="#EFF6FF" Foreground="#2563EB" BorderThickness="0" Margin="0,0,0,6" />
+                    <StackPanel Grid.Row="4" HorizontalAlignment="Center" Spacing="2">
+                        <TextBlock Text="{Binding PriceText}" FontSize="13" FontWeight="Bold" Foreground="#2563EB" HorizontalAlignment="Center" />
+                        <Border Background="{Binding BadgeBg}" CornerRadius="20" Padding="8,2" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding BadgeLabel}" FontSize="9.5" FontWeight="Bold" Foreground="{Binding BadgeFg}" />
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="RewardGroupTemplate" DataType="vm:RewardGroup">
+            <StackPanel Margin="0,0,0,18">
+                <TextBlock Text="{Binding Label}" FontSize="11" FontWeight="Bold" Foreground="#6B7280"
+                           Margin="0,0,0,8" />
+                <ItemsControl ItemsSource="{Binding Items}" ItemTemplate="{StaticResource RewardCardTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto" Background="#F2F3F9">
+
+        <!-- Header -->
+        <Border Grid.Row="0" Padding="20,16">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                    <GradientStop Color="#1D4ED8" Offset="0" />
+                    <GradientStop Color="#2F6FEB" Offset="0.5" />
+                    <GradientStop Color="#4F8BF5" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel Spacing="8">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="14">
+                        <Border Width="52" Height="52" CornerRadius="26" ClipToBounds="True" Background="#33FFFFFF">
+                            <Panel>
+                                <TextBlock Text="{Binding User.Name, Converter={x:Static local:InitialConverter.Instance}}"
+                                           FontSize="20" FontWeight="Bold" Foreground="White"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           IsVisible="{Binding User.Picture, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                                <Image beh:WebImageBehavior.Url="{Binding User.Picture}" Stretch="UniformToFill"
+                                       IsVisible="{Binding User.Picture, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                            </Panel>
+                        </Border>
+                        <StackPanel Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding User.Name}" FontSize="15" FontWeight="Bold" Foreground="White" />
+                            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                <TextBlock Text="⬡" FontSize="16" Foreground="#FBBF24" VerticalAlignment="Center" />
+                                <TextBlock FontSize="22" FontWeight="Bold" Foreground="White" VerticalAlignment="Center">
+                                    <Run Text="{Binding User.Points, StringFormat={}{0:N0}}" />
+                                </TextBlock>
+                                <TextBlock Text="puntos" FontSize="11" Foreground="#CCFFFFFF" VerticalAlignment="Center" />
+                                <Button Content="↻" Command="{Binding RefreshPointsCommand}" IsEnabled="{Binding !PtsCooldownActive}"
+                                        Width="24" Height="24" Padding="0" FontSize="12" Background="#26FFFFFF" Foreground="White"
+                                        CornerRadius="12" BorderThickness="0"
+                                        IsVisible="{Binding !PtsCooldownActive}" />
+                                <TextBlock Text="{Binding PtsCooldown, StringFormat={}{0}s}" FontSize="11" Foreground="#CCFFFFFF"
+                                           IsVisible="{Binding PtsCooldownActive}" />
+                            </StackPanel>
+                            <Button Content="{Binding OpenShopLabel}" Command="{Binding OpenShopCommand}" FontSize="11"
+                                    Background="Transparent" Foreground="#CCFFFFFF" BorderThickness="0" Padding="0" HorizontalAlignment="Left" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Grid.Column="1" Classes="btn-stop-hdr" Content="⏹ Detener" Command="{Binding StopCommand}" VerticalAlignment="Top" />
+                </Grid>
+                <Border Background="#33000000" CornerRadius="6" Padding="8,6"
+                        IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <TextBlock Text="{Binding ErrorMessage}" FontSize="12" Foreground="White" TextWrapping="Wrap" />
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <!-- Body -->
+        <ScrollViewer Grid.Row="1" Padding="20,16">
+            <StackPanel>
+                <ProgressBar IsIndeterminate="True" Height="3" IsVisible="{Binding IsLoading}" />
+                <ItemsControl ItemsSource="{Binding Groups}" ItemTemplate="{StaticResource RewardGroupTemplate}" Margin="0,10,0,0" />
+                <TextBlock Text="No se encontraron items." FontSize="13" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,30,0,0"
+                           IsVisible="{Binding TotalCount, Converter={x:Static local:ZeroConverter.Instance}}" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Status bar -->
+        <Border Grid.Row="2" Background="White" BorderBrush="#E5E7EB" BorderThickness="0,1,0,0" Padding="18,7">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Ellipse Grid.Column="0" Width="7" Height="7" VerticalAlignment="Center" Margin="0,0,8,0"
+                         Fill="{Binding IsPolling, Converter={x:Static local:PollingDotConverter.Instance}}" />
+                <TextBlock Grid.Column="1" Text="{Binding StatusText}" FontSize="11.5" Foreground="#6B7280" VerticalAlignment="Center" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+                    <Border Background="#ECFDF5" CornerRadius="20" Padding="10,3">
+                        <TextBlock Text="{Binding AvailableCount, StringFormat={}{0} recompensas disponibles}" FontSize="10.5" FontWeight="Bold" Foreground="#12B76A" />
+                    </Border>
+                    <Border Background="#EDEEF6" CornerRadius="20" Padding="10,3">
+                        <TextBlock Text="{Binding TotalCount, StringFormat={}{0} recompensas en total}" FontSize="10.5" FontWeight="Bold" Foreground="#9CA3AF" />
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Toasts -->
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Toasts}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,16,16">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:ToastItem">
+                    <Border Background="White" BorderBrush="#12B76A" BorderThickness="0,0,0,0" CornerRadius="9"
+                            Padding="13,9" Margin="0,0,0,8" Width="230" BoxShadow="0 4 16 0 #1A000000">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="🟢 Tienda actualizada" FontSize="11" FontWeight="Bold" Foreground="#12B76A" />
+                            <TextBlock FontSize="12" Foreground="#111827" TextWrapping="Wrap">
+                                <Run Text="{Binding ItemName}" FontWeight="Bold" />
+                                <Run Text=" · " />
+                                <Run Text="{Binding PriceText}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+
+</UserControl>

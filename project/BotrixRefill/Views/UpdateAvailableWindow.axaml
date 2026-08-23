@@ -1,0 +1,19 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="BotrixRefill.Views.UpdateAvailableWindow"
+        Width="360" Height="200" CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        SystemDecorations="BorderOnly"
+        Background="White"
+        Title="Actualización disponible">
+    <Grid RowDefinitions="*,Auto" Margin="24">
+        <StackPanel VerticalAlignment="Center" Spacing="8">
+            <TextBlock Text="🔄 Nueva versión disponible" FontSize="16" FontWeight="Bold" Foreground="#111827" />
+            <TextBlock x:Name="VersionText" Text="Versión x.y.z lista para instalar." FontSize="13" Foreground="#6B7280" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+            <Button Content="Ahora no" Classes="btn-ghost" Click="LaterClick" />
+            <Button Content="Actualizar" Classes="btn-primary" Click="UpdateClick" />
+        </StackPanel>
+    </Grid>
+</Window>
