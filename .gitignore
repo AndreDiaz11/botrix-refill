@@ -1,6 +1,5 @@
 *.log
 *.exe
-/Portable/
 
 project/BotrixRefill/bin/
 project/BotrixRefill/obj/

@@ -81,7 +81,7 @@ dotnet build        # solo compilar
 ```
 **Publicar una release nueva:** crear tag `vX.Y.Z` y pushearlo — `.github/workflows/release.yml` compila, empaqueta con `vpk` y publica el GitHub Release solo. También se puede disparar manual (`workflow_dispatch`) indicando la versión.
 
-**Copia local portable (`Portable/`, gitignored):** build portátil descargado del Release para probar rápido sin instalar nada — a diferencia de la versión Electron (un solo `.exe`), el formato portable de Velopack es una carpeta completa (runtime .NET self-contained + `BotrixRefill.exe` + `Update.exe`); se corre el `.exe` de adentro, se reemplaza toda la carpeta cuando sale una versión nueva.
+**Distribución al usuario final:** se comparte el link del Release (`github.com/AndreDiaz11/botrix-refill/releases`), nunca una copia del `.exe` guardada en el proyecto — la carpeta del proyecto solo tiene código fuente, sin builds compilados. El usuario descarga `BotrixRefill-win-Portable.zip` (sin instalador) y corre el `.exe` de adentro.
 
 ## Env vars
 No requiere ninguna en build/CI (el workflow usa el `GITHUB_TOKEN` automático de Actions). Config de usuario en: `C:\Users\{usuario}\AppData\Roaming\botrix-refill\botrix-refill-config.json` (mismo path que la versión Electron — migración transparente).
