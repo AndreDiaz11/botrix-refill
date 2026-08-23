@@ -1,0 +1,5 @@
+project/node_modules/
+project/out/
+project/dist-electron/
+*.log
+*.exe
