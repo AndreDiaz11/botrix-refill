@@ -10,10 +10,11 @@
         <StackPanel VerticalAlignment="Center" Spacing="8">
             <TextBlock Text="🔄 Nueva versión disponible" FontSize="16" FontWeight="Bold" Foreground="#111827" />
             <TextBlock x:Name="VersionText" Text="Versión x.y.z lista para instalar." FontSize="13" Foreground="#6B7280" TextWrapping="Wrap" />
+            <TextBlock x:Name="ErrorText" FontSize="12" Foreground="#DC2626" TextWrapping="Wrap" IsVisible="False" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
-            <Button Content="Ahora no" Classes="btn-ghost" Click="LaterClick" />
-            <Button Content="Actualizar" Classes="btn-primary" Click="UpdateClick" />
+            <Button x:Name="LaterButton" Content="Ahora no" Classes="btn-ghost" Click="LaterClick" />
+            <Button x:Name="UpdateButton" Content="Actualizar" Classes="btn-primary" Click="UpdateClick" />
         </StackPanel>
     </Grid>
 </Window>

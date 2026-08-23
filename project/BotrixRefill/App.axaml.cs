@@ -1,6 +1,9 @@
+using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using BotrixRefill.Services;
 using BotrixRefill.ViewModels;
 using BotrixRefill.Views;
 
@@ -11,6 +14,14 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+            ErrorLogger.Log("unhandled", e.ExceptionObject as Exception ?? new Exception(e.ExceptionObject?.ToString()));
+        TaskScheduler.UnobservedTaskException += (_, e) =>
+        {
+            ErrorLogger.Log("unobserved-task", e.Exception);
+            e.SetObserved();
+        };
     }
 
     public override void OnFrameworkInitializationCompleted()
