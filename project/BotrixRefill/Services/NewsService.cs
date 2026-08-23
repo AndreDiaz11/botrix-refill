@@ -16,7 +16,7 @@ public class NewsResult
 
 public static class NewsService
 {
-    private const string ReleaseApiUrl = "https://api.github.com/repos/AndreDiaz11/botrix-refill/releases/latest";
+    private const string ReleaseApiBase = "https://api.github.com/repos/AndreDiaz11/botrix-refill/releases/tags/v";
     private static readonly HttpClient Http = new();
 
     public static string CurrentVersion =>
@@ -34,7 +34,7 @@ public static class NewsService
         try
         {
             Http.DefaultRequestHeaders.UserAgent.ParseAdd("BotrixRefill");
-            var res = await Http.GetAsync(ReleaseApiUrl);
+            var res = await Http.GetAsync(ReleaseApiBase + current);
             if (res.IsSuccessStatusCode)
             {
                 var body = await res.Content.ReadAsStringAsync();

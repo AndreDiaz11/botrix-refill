@@ -40,8 +40,13 @@ public partial class MainWindow : Window
             Close();
         });
 
-        _ = CheckNewsAsync();
-        _ = CheckUpdatesAsync();
+        _ = CheckNewsThenUpdatesAsync();
+    }
+
+    private async Task CheckNewsThenUpdatesAsync()
+    {
+        await CheckNewsAsync();
+        await CheckUpdatesAsync();
     }
 
     private async Task CheckNewsAsync()
