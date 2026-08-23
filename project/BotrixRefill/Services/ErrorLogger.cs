@@ -7,7 +7,7 @@ public static class ErrorLogger
 {
     private static readonly string LogPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "botrix-refill",
+        "botrix-refill-app",
         "error-log.txt"
     );
 

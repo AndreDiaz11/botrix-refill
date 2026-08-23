@@ -20,7 +20,7 @@ Migrado el 23/08/2026 de Electron/React a **Avalonia (C#)**, la herramienta úni
 - **Avalonia 11 (C#, .NET 8) + CommunityToolkit.Mvvm** — UI multiplataforma, MVVM con source generators (`[ObservableProperty]`/`[RelayCommand]` sobre campos privados — la sintaxis de "partial properties" de C# 13 no la soporta el SDK de .NET 8 instalado).
 - **`System.Windows.Forms.NotifyIcon`** (vía `<UseWindowsForms>true</UseWindowsForms>`, `net8.0-windows`) — único uso: ícono de bandeja + notificaciones balloon nativas. La app en sí sigue siendo Avalonia.
 - **`HttpClient` nativo** — llamadas REST a botrix.live y Telegram Bot API.
-- **`System.Text.Json`** — config persistida en JSON local (mismo path que la versión Electron, migración transparente para usuarios existentes).
+- **`System.Text.Json`** — config persistida en JSON local, en carpeta propia distinta a la versión Electron (a propósito — cada instalación nueva arranca 100% en blanco en el Setup, sin heredar sesión/streamer de nadie, ni siquiera de una instalación Electron previa en la misma PC).
 - **Velopack** — auto-actualización vía GitHub Releases, reemplazo atómico del exe.
 
 ## Estructura
@@ -84,7 +84,7 @@ dotnet build        # solo compilar
 **Distribución al usuario final:** se comparte el link del Release (`github.com/AndreDiaz11/botrix-refill/releases`), nunca una copia del `.exe` guardada en el proyecto — la carpeta del proyecto solo tiene código fuente, sin builds compilados. El usuario descarga `BotrixRefill-win-Portable.zip` (sin instalador) y corre el `.exe` de adentro.
 
 ## Env vars
-No requiere ninguna en build/CI (el workflow usa el `GITHUB_TOKEN` automático de Actions). Config de usuario en: `C:\Users\{usuario}\AppData\Roaming\botrix-refill\botrix-refill-config.json` (mismo path que la versión Electron — migración transparente).
+No requiere ninguna en build/CI (el workflow usa el `GITHUB_TOKEN` automático de Actions). Config de usuario en: `C:\Users\{usuario}\AppData\Roaming\botrix-refill-app\config.json` — carpeta propia, distinta a `botrix-refill` (la de Electron), a propósito: cada instalación nueva arranca sin datos, en el Setup.
 
 ## Auto-actualización
 Vía GitHub Releases (Velopack), repo: `AndreDiaz11/botrix-refill`. Revisa al abrir, popup "Ahora no"/"Actualizar", reemplazo atómico del exe.
@@ -127,10 +127,11 @@ Solo Windows x64. Publicado self-contained (no requiere .NET instalado en la PC 
 No aplica — consulta la cuenta real de botrix.live/Kick que el usuario configura en Setup.
 
 ## Versión
-1.0.3 — segundo fix real de la misma sesión de pruebas: un error durante la descarga de una actualización tumbaba la app entera en vez de mostrar un mensaje (excepción no manejada en un `async void`). Agregada también una red de seguridad global de errores no capturados.
+1.0.4 — config de usuario separada a una carpeta propia (`botrix-refill-app`), distinta a la de la versión Electron (`botrix-refill`). Cada instalación nueva arranca 100% en blanco en el Setup, sin heredar streamer/Session-kid de nadie.
 
 ## Cambios
-1. (23/08/2026) Fix crítico: `UpdateAvailableWindow.UpdateClick` era `async void` sin try/catch — cualquier falla real durante la descarga (ej. lock de Velopack ocupado, sin conexión) tumbaba toda la app sin dejar rastro. Ahora atrapa la excepción, la registra en el log local y muestra un mensaje de error sin cerrar la app. Agregada red de seguridad global (`AppDomain.UnhandledException` + `TaskScheduler.UnobservedTaskException`) para que cualquier excepción no anticipada quede en el log en vez de perderse.
+1. (23/08/2026) `ConfigStore` pasado a `%AppData%\botrix-refill-app\config.json` (antes reutilizaba la carpeta `botrix-refill` de la versión Electron por continuidad). A pedido explícito: cada usuario que descarga la app debe empezar en cero en el Setup, sin heredar ninguna sesión previa, ni siquiera si tuvo la versión Electron instalada antes en la misma PC.
+2. (23/08/2026) Fix crítico: `UpdateAvailableWindow.UpdateClick` era `async void` sin try/catch — cualquier falla real durante la descarga (ej. lock de Velopack ocupado, sin conexión) tumbaba toda la app sin dejar rastro. Ahora atrapa la excepción, la registra en el log local y muestra un mensaje de error sin cerrar la app. Agregada red de seguridad global (`AppDomain.UnhandledException` + `TaskScheduler.UnobservedTaskException`) para que cualquier excepción no anticipada quede en el log en vez de perderse.
 3. (23/08/2026) Fix de auto-update/Novedades encontrado probando contra una instalación real: los popups de Novedades y Actualización disponible se mostraban superpuestos (`CheckNewsAsync`/`CheckUpdatesAsync` corrían en paralelo) — ahora Novedades se muestra primero y se espera a que se cierre antes de chequear actualizaciones. Además, `NewsService` traía el changelog de `releases/latest` (la versión más nueva en GitHub) en vez del Release que coincide con la versión que realmente está corriendo — ahora consulta `releases/tags/v{versión actual}`.
-3. (23/08/2026) Monitoreo de errores: `Services/ErrorLogger.cs` — log local (`%AppData%\botrix-refill\error-log.txt`, tope de 500 líneas) conectado en los catch que antes fallaban en silencio (poller, refresh de puntos, Telegram, guardado de config). Sin Supabase porque el proyecto no tiene backend propio — todo el tráfico va directo del cliente a APIs públicas.
-4. (23/08/2026) Migración completa de Electron/React a Avalonia (C#): mismas 3 pantallas (Setup/Shop/Pausa), mismo polling con jitter+backoff, mismas notificaciones nativas + Telegram, mismo tray, misma paleta azul. Repo git creado desde cero (el proyecto no tenía control de versiones), GitHub Releases + Velopack para auto-actualización real, popup de Novedades (proyecto compartido con otros streamers). Verificado visualmente con datos reales de producción.
+4. (23/08/2026) Monitoreo de errores: `Services/ErrorLogger.cs` — log local (`%AppData%\botrix-refill-app\error-log.txt`, tope de 500 líneas) conectado en los catch que antes fallaban en silencio (poller, refresh de puntos, Telegram, guardado de config). Sin Supabase porque el proyecto no tiene backend propio — todo el tráfico va directo del cliente a APIs públicas.
+5. (23/08/2026) Migración completa de Electron/React a Avalonia (C#): mismas 3 pantallas (Setup/Shop/Pausa), mismo polling con jitter+backoff, mismas notificaciones nativas + Telegram, mismo tray, misma paleta azul. Repo git creado desde cero (el proyecto no tenía control de versiones), GitHub Releases + Velopack para auto-actualización real, popup de Novedades (proyecto compartido con otros streamers). Verificado visualmente con datos reales de producción.

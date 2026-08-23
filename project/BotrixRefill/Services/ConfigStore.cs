@@ -7,10 +7,13 @@ namespace BotrixRefill.Services;
 
 public static class ConfigStore
 {
+    // Carpeta propia (distinta a "botrix-refill" de la version Electron vieja)
+    // a proposito: cada instalacion nueva de esta version (Avalonia) arranca
+    // 100% en blanco en el Setup, sin heredar sesion/streamer de nadie mas.
     private static readonly string ConfigPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "botrix-refill",
-        "botrix-refill-config.json"
+        "botrix-refill-app",
+        "config.json"
     );
 
     public static AppConfig Load()
