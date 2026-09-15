@@ -6,13 +6,12 @@
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
-    <Version>1.2.0</Version>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <Version>1.2.1</Version>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
-    <None Include="Assets\icon.png" CopyToOutputDirectory="PreserveNewest" />
     <None Include="Assets\tray.ico" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

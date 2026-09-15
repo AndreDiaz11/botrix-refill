@@ -145,7 +145,7 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6" Margin="0,16,0,0">
                     <TextBlock Text="🔒" FontSize="11" />
-                    <TextBlock Text="Tus datos están seguros y encriptados" FontSize="11.5" Foreground="#9CA3AF" />
+                    <TextBlock Text="Tus datos se guardan solo en esta computadora" FontSize="11.5" Foreground="#9CA3AF" />
                 </StackPanel>
             </StackPanel>
         </Border>

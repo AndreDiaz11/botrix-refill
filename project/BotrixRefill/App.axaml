@@ -79,27 +79,5 @@
             <Setter Property="BorderBrush" Value="#2563EB" />
         </Style>
 
-        <Style Selector="Button.accordion-head">
-            <Setter Property="Background" Value="#F7F8FC" />
-            <Setter Property="Foreground" Value="#111827" />
-            <Setter Property="FontSize" Value="13" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Padding" Value="12,10" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        </Style>
-        <Style Selector="Button.accordion-head:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#EDEEF6" />
-        </Style>
-
-        <Style Selector="Border.badge">
-            <Setter Property="CornerRadius" Value="20" />
-            <Setter Property="Padding" Value="8,3" />
-        </Style>
-        <Style Selector="Border.badge TextBlock">
-            <Setter Property="FontSize" Value="10" />
-            <Setter Property="FontWeight" Value="Bold" />
-        </Style>
     </Application.Styles>
 </Application>
