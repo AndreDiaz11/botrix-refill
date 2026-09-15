@@ -40,16 +40,25 @@ public partial class MainWindow : Window
         // Si el usuario vuelve a abrir el .exe mientras esta instancia ya está corriendo,
         // Program.Main detecta el candado de instancia única y avisa por acá para traer
         // esta ventana al frente en vez de dejar que se abra una segunda copia.
-        _showRequestEvent = new EventWaitHandle(false, EventResetMode.AutoReset, Program.ShowRequestEventName);
-        var listenerThread = new Thread(() =>
+        try
         {
-            while (true)
+            _showRequestEvent = new EventWaitHandle(false, EventResetMode.AutoReset, Program.ShowRequestEventName);
+            ErrorLogger.LogInfo("single-instance", "Escuchando pedidos de traer la ventana al frente");
+            var listenerThread = new Thread(() =>
             {
-                _showRequestEvent.WaitOne();
-                Dispatcher.UIThread.Post(ShowAndActivate);
-            }
-        }) { IsBackground = true };
-        listenerThread.Start();
+                while (true)
+                {
+                    _showRequestEvent.WaitOne();
+                    ErrorLogger.LogInfo("single-instance", "Pedido recibido — trayendo la ventana al frente");
+                    Dispatcher.UIThread.Post(ShowAndActivate);
+                }
+            }) { IsBackground = true };
+            listenerThread.Start();
+        }
+        catch (Exception ex)
+        {
+            ErrorLogger.Log("single-instance-listen", ex);
+        }
 
         _ = CheckNewsAndUpdatesAsync();
     }

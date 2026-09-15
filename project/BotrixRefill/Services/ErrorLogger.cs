@@ -13,14 +13,18 @@ public static class ErrorLogger
 
     private const int MaxLines = 500;
 
-    public static void Log(string source, Exception ex)
+    public static void Log(string source, Exception ex) => Write(source, ex.Message);
+
+    public static void LogInfo(string source, string message) => Write(source, message);
+
+    private static void Write(string source, string message)
     {
         try
         {
             var dir = Path.GetDirectoryName(LogPath)!;
             Directory.CreateDirectory(dir);
 
-            var line = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {source}: {ex.Message}";
+            var line = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {source}: {message}";
             File.AppendAllLines(LogPath, new[] { line });
 
             Trim();
