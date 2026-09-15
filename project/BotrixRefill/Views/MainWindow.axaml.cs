@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -13,6 +14,7 @@ public partial class MainWindow : Window
 {
     private TrayService? _tray;
     private bool _isQuitting;
+    private EventWaitHandle? _showRequestEvent;
     private MainWindowViewModel? Vm => DataContext as MainWindowViewModel;
 
     public MainWindow()
@@ -28,19 +30,35 @@ public partial class MainWindow : Window
 
         var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "tray.ico");
         _tray = new TrayService(iconPath);
-        _tray.OpenRequested += () => Dispatcher.UIThread.Post(() =>
-        {
-            Show();
-            WindowState = WindowState.Normal;
-            Activate();
-        });
+        _tray.OpenRequested += ShowAndActivate;
         _tray.ExitRequested += () => Dispatcher.UIThread.Post(() =>
         {
             _isQuitting = true;
             Close();
         });
 
+        // Si el usuario vuelve a abrir el .exe mientras esta instancia ya está corriendo,
+        // Program.Main detecta el candado de instancia única y avisa por acá para traer
+        // esta ventana al frente en vez de dejar que se abra una segunda copia.
+        _showRequestEvent = new EventWaitHandle(false, EventResetMode.AutoReset, Program.ShowRequestEventName);
+        var listenerThread = new Thread(() =>
+        {
+            while (true)
+            {
+                _showRequestEvent.WaitOne();
+                Dispatcher.UIThread.Post(ShowAndActivate);
+            }
+        }) { IsBackground = true };
+        listenerThread.Start();
+
         _ = CheckNewsAndUpdatesAsync();
+    }
+
+    private void ShowAndActivate()
+    {
+        Show();
+        WindowState = WindowState.Normal;
+        Activate();
     }
 
     // Las dos consultas de red (Novedades y Actualización) se disparan a la vez
