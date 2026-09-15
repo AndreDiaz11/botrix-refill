@@ -19,7 +19,7 @@
                 </Border>
                 <Panel Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Button Content="{Binding ActionLabel}" Command="{Binding CopyCommand}"
-                            IsVisible="{Binding IsAvailable}" Padding="12,7" FontSize="11.5" FontWeight="Bold"
+                            Padding="12,7" FontSize="11.5" FontWeight="Bold"
                             Background="#2563EB" Foreground="White" CornerRadius="8" BorderThickness="0">
                         <Button.Styles>
                             <Style Selector="Button:pointerover /template/ ContentPresenter">
@@ -27,9 +27,6 @@
                             </Style>
                         </Button.Styles>
                     </Button>
-                    <Border IsVisible="{Binding !IsAvailable}" Background="#F3F4F6" CornerRadius="8" Padding="12,7">
-                        <TextBlock Text="🔒 Sin stock" FontSize="11.5" FontWeight="SemiBold" Foreground="#9CA3AF" />
-                    </Border>
                 </Panel>
             </Grid>
         </DataTemplate>
@@ -67,45 +64,64 @@
     <Grid RowDefinitions="Auto,*,Auto" Background="#F2F3F9">
 
         <!-- Header -->
-        <Grid Grid.Row="0" RowDefinitions="Auto,Auto" Margin="0,0,0,0">
-            <Grid.Background>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
-                    <GradientStop Color="#1D4ED8" Offset="0" />
-                    <GradientStop Color="#2F6FEB" Offset="0.5" />
-                    <GradientStop Color="#4F8BF5" Offset="1" />
-                </LinearGradientBrush>
-            </Grid.Background>
+        <Border Grid.Row="0" BoxShadow="0 6 20 0 #26000000" ClipToBounds="False">
+        <Panel ClipToBounds="True">
+            <Border>
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                        <GradientStop Color="#173B8F" Offset="0" />
+                        <GradientStop Color="#2251D9" Offset="0.55" />
+                        <GradientStop Color="#4C3FE0" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
 
-            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,16,20,14">
+            <Ellipse Width="280" Height="280" Fill="#14FFFFFF" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-140,-90,0">
+                <Ellipse.Effect><BlurEffect Radius="50" /></Ellipse.Effect>
+            </Ellipse>
+            <Ellipse Width="180" Height="180" Fill="#1AFFFFFF" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-70,0,0,-110">
+                <Ellipse.Effect><BlurEffect Radius="40" /></Ellipse.Effect>
+            </Ellipse>
+
+            <Grid RowDefinitions="Auto,Auto">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="22,18,20,16">
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="14">
-                    <Border Width="52" Height="52" CornerRadius="26" ClipToBounds="True" Background="#33FFFFFF">
-                        <Panel>
-                            <TextBlock Text="{Binding User.Name, Converter={x:Static local:InitialConverter.Instance}}"
-                                       FontSize="20" FontWeight="Bold" Foreground="White"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       IsVisible="{Binding User.Picture, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
-                            <Image beh:WebImageBehavior.Url="{Binding User.Picture}" Stretch="UniformToFill"
-                                   IsVisible="{Binding User.Picture, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                        </Panel>
+                    <Border Width="54" Height="54" CornerRadius="27" Background="#26FFFFFF"
+                            BorderBrush="#40FFFFFF" BorderThickness="2">
+                        <Border Width="48" Height="48" CornerRadius="24" ClipToBounds="True">
+                            <Panel>
+                                <TextBlock Text="{Binding User.Name, Converter={x:Static local:InitialConverter.Instance}}"
+                                           FontSize="19" FontWeight="Bold" Foreground="White"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           IsVisible="{Binding User.Picture, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                                <Image beh:WebImageBehavior.Url="{Binding User.Picture}" Stretch="UniformToFill"
+                                       IsVisible="{Binding User.Picture, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                            </Panel>
+                        </Border>
                     </Border>
-                    <StackPanel Spacing="2" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding User.Name}" FontSize="15" FontWeight="Bold" Foreground="White" />
-                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                            <TextBlock Text="⬡" FontSize="16" Foreground="#FBBF24" VerticalAlignment="Center" />
-                            <TextBlock FontSize="22" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"
-                                       Text="{Binding User.Points, StringFormat={}{0:N0}}" />
-                            <TextBlock Text="puntos" FontSize="11" Foreground="#CCFFFFFF" VerticalAlignment="Center" />
-                            <Button Content="↻" Command="{Binding RefreshPointsCommand}" IsEnabled="{Binding !PtsCooldownActive}"
-                                    Width="24" Height="24" Padding="0" FontSize="12" Background="#26FFFFFF" Foreground="White"
-                                    CornerRadius="12" BorderThickness="0"
-                                    IsVisible="{Binding !PtsCooldownActive}" />
-                            <TextBlock Text="{Binding PtsCooldown, StringFormat={}{0}s}" FontSize="11" Foreground="#CCFFFFFF"
-                                       IsVisible="{Binding PtsCooldownActive}" />
-                        </StackPanel>
+                    <StackPanel Spacing="4" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="6">
                             <Ellipse Width="7" Height="7" Fill="#4ADE80" VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding StreamerDisplay}" FontSize="12" Foreground="#CCFFFFFF" />
+                            <TextBlock Text="{Binding StreamerDisplay}" FontSize="11.5" FontWeight="SemiBold" Foreground="#D8E1FF" />
                         </StackPanel>
+                        <TextBlock Text="{Binding User.Name}" FontSize="16" FontWeight="Bold" Foreground="White" />
+
+                        <Border Background="#1EFFFFFF" CornerRadius="20" Padding="10,4" Margin="0,2,0,0" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal" Spacing="7" VerticalAlignment="Center">
+                                <TextBlock Text="⬡" FontSize="14" Foreground="#FBBF24" VerticalAlignment="Center" />
+                                <TextBlock FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"
+                                           Text="{Binding User.Points, StringFormat={}{0:N0}}" />
+                                <TextBlock Text="puntos" FontSize="10.5" Foreground="#CCFFFFFF" VerticalAlignment="Center" />
+                                <Button Content="↻" Command="{Binding RefreshPointsCommand}" IsEnabled="{Binding !PtsCooldownActive}"
+                                        Width="22" Height="22" Padding="0" FontSize="11" Background="#26FFFFFF" Foreground="White"
+                                        CornerRadius="11" BorderThickness="0"
+                                        IsVisible="{Binding !PtsCooldownActive}" />
+                                <TextBlock Text="{Binding PtsCooldown, StringFormat={}{0}s}" FontSize="10.5" Foreground="#CCFFFFFF"
+                                           IsVisible="{Binding PtsCooldownActive}" />
+                            </StackPanel>
+                        </Border>
+                        <TextBlock Text="{Binding PointsErrorMessage}" FontSize="10.5" Foreground="#FCA5A5" TextWrapping="Wrap" MaxWidth="280"
+                                   IsVisible="{Binding PointsErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                     </StackPanel>
                 </StackPanel>
 
@@ -113,28 +129,34 @@
                         VerticalAlignment="Top" HorizontalAlignment="Right" />
             </Grid>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12" Margin="20,0,20,16">
-                <Border Background="#22FFFFFF" CornerRadius="12" Padding="16,10" MinWidth="150">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12" Margin="22,0,20,18">
+                <Border Background="#1AFFFFFF" BorderBrush="#22FFFFFF" BorderThickness="1" CornerRadius="12" Padding="14,11" MinWidth="150">
                     <StackPanel Orientation="Horizontal" Spacing="10">
-                        <TextBlock Text="🎁" FontSize="18" VerticalAlignment="Center" />
+                        <Border Width="30" Height="30" CornerRadius="9" Background="#26FFFFFF">
+                            <TextBlock Text="🎁" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
                         <StackPanel Spacing="0">
                             <TextBlock Text="{Binding AvailableCount}" FontSize="18" FontWeight="Bold" Foreground="White" />
                             <TextBlock Text="Recompensas disponibles" FontSize="10.5" Foreground="#CCFFFFFF" TextWrapping="Wrap" Width="110" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                <Border Background="#22FFFFFF" CornerRadius="12" Padding="16,10" MinWidth="150">
+                <Border Background="#1AFFFFFF" BorderBrush="#22FFFFFF" BorderThickness="1" CornerRadius="12" Padding="14,11" MinWidth="150">
                     <StackPanel Orientation="Horizontal" Spacing="10">
-                        <TextBlock Text="⚡" FontSize="18" VerticalAlignment="Center" />
+                        <Border Width="30" Height="30" CornerRadius="9" Background="#26FFFFFF">
+                            <TextBlock Text="⚡" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
                         <StackPanel Spacing="0">
                             <TextBlock Text="{Binding RedeemedTodayCount}" FontSize="18" FontWeight="Bold" Foreground="White" />
                             <TextBlock Text="Recompensas reclamadas hoy" FontSize="10.5" Foreground="#CCFFFFFF" TextWrapping="Wrap" Width="120" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                <Border Background="#22FFFFFF" CornerRadius="12" Padding="16,10" MinWidth="150">
+                <Border Background="#1AFFFFFF" BorderBrush="#22FFFFFF" BorderThickness="1" CornerRadius="12" Padding="14,11" MinWidth="150">
                     <StackPanel Orientation="Horizontal" Spacing="10">
-                        <TextBlock Text="🕐" FontSize="18" VerticalAlignment="Center" />
+                        <Border Width="30" Height="30" CornerRadius="9" Background="#26FFFFFF">
+                            <TextBlock Text="🕐" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
                         <StackPanel Spacing="0">
                             <TextBlock Text="{Binding LastUpdate, StringFormat={}{0:HH:mm:ss}}" FontSize="18" FontWeight="Bold" Foreground="White" />
                             <TextBlock Text="Última revisión" FontSize="10.5" Foreground="#CCFFFFFF" />
@@ -142,7 +164,9 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-        </Grid>
+            </Grid>
+        </Panel>
+        </Border>
 
         <!-- Body -->
         <ScrollViewer Grid.Row="1" Padding="20,16">

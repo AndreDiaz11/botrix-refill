@@ -29,16 +29,19 @@ public static class BotrixApiService
         return JsonSerializer.Deserialize<List<ShopItem>>(body, JsonOpts) ?? new List<ShopItem>();
     }
 
-    public static async Task<BotrixUser?> FetchUserAsync(string streamer, string sessionKid)
+    public static async Task<BotrixUser> FetchUserAsync(string streamer, string sessionKid)
     {
         var name = ExtractStreamer(streamer);
+        var cleanKid = sessionKid.Trim().Trim('"', '\'');
         var url = $"https://botrix.live/api/public/leaderboard/whoamiKick?user={Uri.EscapeDataString(name)}&t={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
         using var req = new HttpRequestMessage(HttpMethod.Get, url);
-        req.Headers.Add("Session-kid", sessionKid);
+        req.Headers.Add("Session-kid", cleanKid);
         var res = await Http.SendAsync(req);
         if (!res.IsSuccessStatusCode) throw new Exception("Error al obtener puntos");
         var body = await res.Content.ReadAsStringAsync();
         var data = JsonSerializer.Deserialize<WhoamiResponse>(body, JsonOpts);
-        return data?.User;
+        if (data?.User is null)
+            throw new Exception("Tu Session-kid parece inválido o vencido — vuelve a copiarlo desde botrix.live");
+        return data.User;
     }
 }

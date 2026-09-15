@@ -75,7 +75,7 @@ public partial class SetupViewModel : ViewModelBase
             var cfg = new AppConfig
             {
                 Streamer = Streamer.Trim(),
-                SessionKid = SessionKid.Trim(),
+                SessionKid = SessionKid.Trim().Trim('"', '\''),
                 TelegramEnabled = TelegramEnabled,
                 TelegramToken = TelegramToken.Trim(),
                 TelegramChatId = TelegramChatId.Trim(),

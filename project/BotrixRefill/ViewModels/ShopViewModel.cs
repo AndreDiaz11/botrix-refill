@@ -51,6 +51,9 @@ public partial class ShopViewModel : ViewModelBase, IDisposable
     private string _errorMessage = "";
 
     [ObservableProperty]
+    private string _pointsErrorMessage = "";
+
+    [ObservableProperty]
     private bool _isPolling;
 
     [ObservableProperty]
@@ -102,22 +105,21 @@ public partial class ShopViewModel : ViewModelBase, IDisposable
     {
         IsLoading = true;
         ErrorMessage = "";
+        await Task.WhenAll(LoadShopAsync(), RefreshUserAsync());
+        IsLoading = false;
+    }
+
+    private async Task LoadShopAsync()
+    {
         try
         {
-            var shopTask = BotrixApiService.FetchShopItemsAsync(BotrixApiService.ExtractStreamer(_config.Streamer));
-            var userTask = BotrixApiService.FetchUserAsync(_config.Streamer, _config.SessionKid);
-            await Task.WhenAll(shopTask, userTask);
-            ApplyItems(await shopTask, DateTime.Now);
-            User = await userTask;
+            var items = await BotrixApiService.FetchShopItemsAsync(BotrixApiService.ExtractStreamer(_config.Streamer));
+            ApplyItems(items, DateTime.Now);
         }
         catch (Exception e)
         {
             ErrorMessage = e.Message;
             ErrorLogger.Log("shop-load", e);
-        }
-        finally
-        {
-            IsLoading = false;
         }
     }
 
@@ -125,12 +127,12 @@ public partial class ShopViewModel : ViewModelBase, IDisposable
     {
         try
         {
-            var user = await BotrixApiService.FetchUserAsync(_config.Streamer, _config.SessionKid);
-            if (user != null) User = user;
+            User = await BotrixApiService.FetchUserAsync(_config.Streamer, _config.SessionKid);
+            PointsErrorMessage = "";
         }
         catch (Exception e)
         {
-            // no se muestra en UI — se reintenta solo en el próximo ciclo de 60s
+            PointsErrorMessage = e.Message;
             ErrorLogger.Log("refresh-points", e);
         }
     }
