@@ -14,6 +14,7 @@ public partial class MainWindow : Window
 {
     private TrayService? _tray;
     private bool _isQuitting;
+    private bool _initialized;
     private EventWaitHandle? _showRequestEvent;
     private MainWindowViewModel? Vm => DataContext as MainWindowViewModel;
 
@@ -26,6 +27,14 @@ public partial class MainWindow : Window
 
     private void OnOpened(object? sender, EventArgs e)
     {
+        // Avalonia dispara Opened cada vez que la ventana pasa de oculta a visible
+        // (ej. al volver a mostrarla desde el tray con Show()), no solo la primera vez.
+        // Sin esta guarda, cada reapertura creaba un ícono de bandeja nuevo (sin
+        // eliminar el anterior) y volvía a disparar el chequeo de Novedades/Actualización
+        // como si fuera la primera vez que se abre la app.
+        if (_initialized) return;
+        _initialized = true;
+
         if (Vm != null) Vm.RefillNotification += (title, body) => _tray?.ShowNotification(title, body);
 
         var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "tray.ico");
