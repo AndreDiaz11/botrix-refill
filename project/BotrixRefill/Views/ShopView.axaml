@@ -11,7 +11,7 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="RewardRowTemplate" DataType="vm:RewardCardViewModel">
-            <Grid ColumnDefinitions="300,110,150,140,*" Height="46">
+            <Grid ColumnDefinitions="300,110,150,140" Height="46">
                 <TextBlock Grid.Column="0" Text="{Binding Name}" FontSize="13" Foreground="#111827" VerticalAlignment="Center"
                            TextTrimming="CharacterEllipsis" />
                 <TextBlock Grid.Column="1" Text="{Binding PriceText}" FontSize="13" FontWeight="Bold" Foreground="#2563EB" VerticalAlignment="Center" />
@@ -42,7 +42,7 @@
                         <TextBlock Text="{Binding Label}" FontSize="14.5" FontWeight="Bold" Foreground="#111827" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <Grid ColumnDefinitions="300,110,150,140,*" Margin="16,0,16,6">
+                    <Grid ColumnDefinitions="300,110,150,140" Margin="16,0,16,6">
                         <TextBlock Grid.Column="0" Text="Recompensa" FontSize="11" FontWeight="Bold" Foreground="#9CA3AF" />
                         <TextBlock Grid.Column="1" Text="Puntos" FontSize="11" FontWeight="Bold" Foreground="#9CA3AF" />
                         <TextBlock Grid.Column="2" Text="Disponibilidad" FontSize="11" FontWeight="Bold" Foreground="#9CA3AF" />
@@ -108,10 +108,16 @@
                                 <TextBlock FontSize="13" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"
                                            Text="{Binding User.Points, StringFormat={}{0:N0}}" />
                                 <TextBlock Text="pts" FontSize="9.5" Foreground="#CCFFFFFF" VerticalAlignment="Center" />
-                                <Button Content="↻" Command="{Binding RefreshPointsCommand}" IsEnabled="{Binding !PtsCooldownActive}"
-                                        Width="18" Height="18" Padding="0" FontSize="9" Background="#26FFFFFF" Foreground="White"
+                                <Button Command="{Binding RefreshPointsCommand}" IsEnabled="{Binding !PtsCooldownActive}"
+                                        Width="18" Height="18" Padding="0" Background="#26FFFFFF" Foreground="White"
                                         CornerRadius="9" BorderThickness="0"
-                                        IsVisible="{Binding !PtsCooldownActive}" />
+                                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                        IsVisible="{Binding !PtsCooldownActive}">
+                                    <Canvas Width="12" Height="12">
+                                        <Path Data="M2,7 A5,5 0 1 1 9,10.3" Stroke="White" StrokeThickness="1.4" />
+                                        <Polygon Points="9,6.6 9,10.6 5.6,9.1" Fill="White" />
+                                    </Canvas>
+                                </Button>
                                 <TextBlock Text="{Binding PtsCooldown, StringFormat={}{0}s}" FontSize="9.5" Foreground="#CCFFFFFF"
                                            IsVisible="{Binding PtsCooldownActive}" />
                             </StackPanel>
@@ -139,7 +145,7 @@
 
         <!-- Body -->
         <ScrollViewer Grid.Row="1" Padding="20,10,20,0">
-            <StackPanel MaxWidth="1080" HorizontalAlignment="Stretch">
+            <StackPanel MaxWidth="760" HorizontalAlignment="Stretch">
                 <ProgressBar IsIndeterminate="True" Height="3" IsVisible="{Binding IsLoading}" Margin="0,0,0,10" />
 
                 <Border Background="#33000000" CornerRadius="6" Padding="8,6" Margin="0,0,0,12"
