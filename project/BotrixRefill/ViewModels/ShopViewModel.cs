@@ -60,16 +60,10 @@ public partial class ShopViewModel : ViewModelBase, IDisposable
     private int _ptsCooldown;
 
     [ObservableProperty]
-    private int _availableCount;
-
-    [ObservableProperty]
     private int _totalCount;
 
     [ObservableProperty]
     private ObservableCollection<ToastItem> _toasts = new();
-
-    [ObservableProperty]
-    private int _redeemedTodayCount;
 
     public string OpenShopLabel => $"🔴 {StreamerDisplay}";
     public bool PtsCooldownActive => PtsCooldown > 0;
@@ -93,8 +87,6 @@ public partial class ShopViewModel : ViewModelBase, IDisposable
         _pointsTimer = new System.Timers.Timer(60000) { AutoReset = true };
         _pointsTimer.Elapsed += (_, _) => Dispatcher.UIThread.Post(() => _ = RefreshUserAsync());
         _pointsTimer.Start();
-
-        RedeemedTodayCount = RedemptionTracker.GetTodayCount();
 
         _ = LoadAsync();
         _poller.Start(config);
@@ -191,13 +183,11 @@ public partial class ShopViewModel : ViewModelBase, IDisposable
             var key = $"{item.Code} {item.Name}".ToLowerInvariant();
             var idx = Array.FindIndex(GroupDefs, g => g.Match(key));
             var card = new RewardCardViewModel(item);
-            card.Redeemed += () => RedeemedTodayCount = RedemptionTracker.IncrementToday();
             buckets[idx].Items.Add(card);
         }
 
         Groups = new ObservableCollection<RewardGroup>(buckets.Where(b => b.Items.Count > 0));
         LastUpdate = timestamp;
-        AvailableCount = items.Count(i => i.Stock != 0);
         TotalCount = items.Count;
         OnPropertyChanged(nameof(StatusText));
     }

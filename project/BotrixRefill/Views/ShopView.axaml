@@ -80,7 +80,7 @@
                 <Ellipse.Effect><BlurEffect Radius="50" /></Ellipse.Effect>
             </Ellipse>
 
-            <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto,Auto,Auto" MaxWidth="1080" Margin="22,0,22,0" Height="72"
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto" MaxWidth="1080" Margin="22,0,22,0" Height="64"
                   HorizontalAlignment="Stretch" VerticalAlignment="Center">
                 <!-- Avatar -->
                 <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Background="#26FFFFFF"
@@ -97,79 +97,49 @@
                     </Border>
                 </Border>
 
-                <!-- Nombre + streamer -->
-                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" Spacing="1">
-                    <TextBlock Text="{Binding User.Name}" FontSize="14" FontWeight="Bold" Foreground="White" />
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Ellipse Width="6" Height="6" Fill="#4ADE80" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding StreamerDisplay}" FontSize="10.5" Foreground="#CBD5FF" />
+                <!-- Nombre + puntos juntos, streamer como caption debajo -->
+                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" Spacing="2">
+                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding User.Name}" FontSize="14" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
+                        <Border Background="#1EFFFFFF" CornerRadius="20" Padding="8,4">
+                            <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                                <TextBlock Text="⬡" FontSize="12" Foreground="#FBBF24" VerticalAlignment="Center" />
+                                <TextBlock FontSize="13" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"
+                                           Text="{Binding User.Points, StringFormat={}{0:N0}}" />
+                                <TextBlock Text="pts" FontSize="9.5" Foreground="#CCFFFFFF" VerticalAlignment="Center" />
+                                <Button Content="↻" Command="{Binding RefreshPointsCommand}" IsEnabled="{Binding !PtsCooldownActive}"
+                                        Width="18" Height="18" Padding="0" FontSize="9" Background="#26FFFFFF" Foreground="White"
+                                        CornerRadius="9" BorderThickness="0"
+                                        IsVisible="{Binding !PtsCooldownActive}" />
+                                <TextBlock Text="{Binding PtsCooldown, StringFormat={}{0}s}" FontSize="9.5" Foreground="#CCFFFFFF"
+                                           IsVisible="{Binding PtsCooldownActive}" />
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
-                </StackPanel>
-
-                <!-- Puntos (columna flexible, se estira ella sola) -->
-                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
-                    <Border Background="#1EFFFFFF" CornerRadius="20" Padding="10,6">
-                        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                            <TextBlock Text="⬡" FontSize="13" Foreground="#FBBF24" VerticalAlignment="Center" />
-                            <TextBlock FontSize="15" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"
-                                       Text="{Binding User.Points, StringFormat={}{0:N0}}" />
-                            <TextBlock Text="pts" FontSize="10" Foreground="#CCFFFFFF" VerticalAlignment="Center" />
-                            <Button Content="↻" Command="{Binding RefreshPointsCommand}" IsEnabled="{Binding !PtsCooldownActive}"
-                                    Width="20" Height="20" Padding="0" FontSize="10" Background="#26FFFFFF" Foreground="White"
-                                    CornerRadius="10" BorderThickness="0"
-                                    IsVisible="{Binding !PtsCooldownActive}" />
-                            <TextBlock Text="{Binding PtsCooldown, StringFormat={}{0}s}" FontSize="10" Foreground="#CCFFFFFF"
-                                       IsVisible="{Binding PtsCooldownActive}" />
-                        </StackPanel>
-                    </Border>
-                    <TextBlock Text="⚠ puntos" FontSize="9.5" FontWeight="Bold" Foreground="#FCA5A5" Margin="6,0,0,0" VerticalAlignment="Center"
-                               ToolTip.Tip="{Binding PointsErrorMessage}"
+                    <TextBlock Text="{Binding StreamerDisplay, StringFormat=Revisado en: {0}}" FontSize="10.5" Foreground="#CBD5FF" />
+                    <TextBlock Text="{Binding PointsErrorMessage}" FontSize="9.5" FontWeight="Bold" Foreground="#FCA5A5" TextWrapping="Wrap" MaxWidth="280"
                                IsVisible="{Binding PointsErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 </StackPanel>
 
-                <!-- Stats compactos -->
-                <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="18,0,0,0"
-                            ToolTip.Tip="Recompensas disponibles">
-                    <Border Width="26" Height="26" CornerRadius="13" Background="White">
-                        <TextBlock Text="🎁" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                    <TextBlock Text="{Binding AvailableCount}" FontSize="15" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
-                </StackPanel>
-
-                <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="16,0,0,0"
-                            ToolTip.Tip="Recompensas reclamadas hoy">
-                    <Border Width="26" Height="26" CornerRadius="13" Background="White">
-                        <TextBlock Text="⚡" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                    <TextBlock Text="{Binding RedeemedTodayCount}" FontSize="15" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
-                </StackPanel>
-
-                <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="16,0,0,0"
+                <!-- Última revisión + Detener, agrupados y separados del bloque de la izquierda -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center"
                             ToolTip.Tip="Última revisión">
-                    <Border Width="26" Height="26" CornerRadius="13" Background="White">
-                        <TextBlock Text="🕐" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Border Width="24" Height="24" CornerRadius="12" Background="White">
+                        <TextBlock Text="🕐" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
-                    <TextBlock Text="{Binding LastUpdate, StringFormat={}{0:HH:mm:ss}}" FontSize="14" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding LastUpdate, StringFormat={}{0:HH:mm:ss}}" FontSize="13" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
                 </StackPanel>
 
-                <Button Grid.Column="7" Classes="btn-stop-hdr" Content="⏹ Detener" Command="{Binding StopCommand}"
-                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="20,0,0,0" />
+                <Button Grid.Column="4" Classes="btn-stop-hdr" Content="⏹ Detener" Command="{Binding StopCommand}"
+                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="18,0,0,0" />
             </Grid>
         </Panel>
         </Border>
 
         <!-- Body -->
-        <ScrollViewer Grid.Row="1" Padding="20,16,20,0">
+        <ScrollViewer Grid.Row="1" Padding="20,10,20,0">
             <StackPanel MaxWidth="1080" HorizontalAlignment="Stretch">
                 <ProgressBar IsIndeterminate="True" Height="3" IsVisible="{Binding IsLoading}" Margin="0,0,0,10" />
-
-                <Border Background="#EFF6FF" BorderBrush="#DBEAFE" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,16">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="ℹ" FontSize="14" Foreground="#2563EB" />
-                        <TextBlock Text="Canjea tus puntos por recompensas en directo. El stock se actualiza automáticamente."
-                                   FontSize="12.5" Foreground="#1E40AF" TextWrapping="Wrap" />
-                    </StackPanel>
-                </Border>
 
                 <Border Background="#33000000" CornerRadius="6" Padding="8,6" Margin="0,0,0,12"
                         IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
@@ -187,18 +157,10 @@
 
         <!-- Status bar -->
         <Border Grid.Row="2" Background="White" BorderBrush="#E5E7EB" BorderThickness="0,1,0,0" Padding="18,7">
-            <Grid ColumnDefinitions="Auto,*,Auto">
+            <Grid ColumnDefinitions="Auto,*">
                 <Ellipse Grid.Column="0" Width="7" Height="7" VerticalAlignment="Center" Margin="0,0,8,0"
                          Fill="{Binding IsPolling, Converter={x:Static local:PollingDotConverter.Instance}}" />
                 <TextBlock Grid.Column="1" Text="{Binding StatusText}" FontSize="11.5" Foreground="#6B7280" VerticalAlignment="Center" />
-                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
-                    <Border Background="#ECFDF5" CornerRadius="20" Padding="10,3">
-                        <TextBlock Text="{Binding AvailableCount, StringFormat={}{0} recompensas disponibles}" FontSize="10.5" FontWeight="Bold" Foreground="#12B76A" />
-                    </Border>
-                    <Border Background="#EDEEF6" CornerRadius="20" Padding="10,3">
-                        <TextBlock Text="{Binding TotalCount, StringFormat={}{0} recompensas en total}" FontSize="10.5" FontWeight="Bold" Foreground="#9CA3AF" />
-                    </Border>
-                </StackPanel>
             </Grid>
         </Border>
 

@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Avalonia;
@@ -13,8 +12,6 @@ namespace BotrixRefill.ViewModels;
 public partial class RewardCardViewModel : ViewModelBase
 {
     public ShopItem Item { get; }
-
-    public event Action? Redeemed;
 
     public string Name => Item.Name;
     public string Code => Item.Code;
@@ -70,7 +67,6 @@ public partial class RewardCardViewModel : ViewModelBase
             var clipboard = window.Clipboard;
             if (clipboard != null) await clipboard.SetTextAsync($"!{Code}");
         }
-        Redeemed?.Invoke();
         Copied = true;
         await Task.Delay(1200);
         Copied = false;

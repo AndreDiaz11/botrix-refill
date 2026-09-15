@@ -16,9 +16,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private ViewModelBase _currentPage = null!;
 
     [ObservableProperty]
-    private string _titlebarPill = "";
-
-    [ObservableProperty]
     private bool _isPaused;
 
     [ObservableProperty]
@@ -55,7 +52,6 @@ public partial class MainWindowViewModel : ViewModelBase
             $"{item.Name} ya está disponible! ({item.Price.ToString("N0", CultureInfo.GetCultureInfo("es-PE"))} puntos)"
         );
         CurrentPage = shop;
-        TitlebarPill = $"@{shop.StreamerDisplay}";
         IsInShop = true;
         IsPaused = false;
     }
@@ -70,7 +66,6 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         IsPaused = false;
         CurrentPage = MakeSetup(ConfigStore.Load());
-        TitlebarPill = "";
         IsInShop = false;
     }
 

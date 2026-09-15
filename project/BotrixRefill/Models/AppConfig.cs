@@ -21,10 +21,4 @@ public class AppConfig
 
     [JsonPropertyName("lastSeenVersion")]
     public string LastSeenVersion { get; set; } = "";
-
-    [JsonPropertyName("redeemedTodayDate")]
-    public string RedeemedTodayDate { get; set; } = "";
-
-    [JsonPropertyName("redeemedTodayCount")]
-    public int RedeemedTodayCount { get; set; }
 }
