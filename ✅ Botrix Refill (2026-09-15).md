@@ -99,7 +99,7 @@ No aplica en el sentido web — se "despliega" publicando un GitHub Release con 
 Ninguna en el cliente. `GITHUB_TOKEN` del propio workflow de Actions (automático, con permiso `contents: write` solo para ese repo).
 
 ## Estado
-Funcional: sí | Beta: no (`v1.4.2`) | Última revisión (15/09/2026): el usuario mandó el `error-log.txt` con el diagnóstico agregado en v1.4.1, y eso permitió encontrar la causa real del bug de "instancias duplicadas" — nunca fueron procesos distintos, era `Window.Opened` de Avalonia disparándose de nuevo en cada `Show()` tras un `Hide()`, re-ejecutando toda la inicialización de `MainWindow` (tray, listener, chequeo de Novedades/Actualización) cada vez que se reabría desde el tray. Corregido con una bandera `_initialized`. Todos los puntos reportados por el usuario en esta ronda de feedback (header, scroll, ancho máximo, ayuda de Session-kid, instancias duplicadas) están corregidos — **pendiente de confirmación final del usuario probando v1.4.2**. `dotnet build` verificado sin errores.
+Funcional: sí | Beta: no (`v1.4.2`) | Última revisión (15/09/2026): usuario confirmó, probando v1.4.2 en real, que el bug de instancias duplicadas/popup repetido quedó resuelto. Con esto, los 5 puntos de la ronda de feedback (puntos que no cargaban, botón de canje siempre activo, header/scroll/ancho máximo, ayuda de Session-kid, instancias duplicadas) están todos confirmados por el usuario — sin pendientes abiertos por ahora.
 
 ## Integraciones externas
 | Servicio | Endpoint | Auth | Uso |
